@@ -1,0 +1,15 @@
+version: '2'
+
+services:
+  coreykepple:
+    build:
+      context: ./
+      dockerfile: ./Dockerfile
+    volumes:
+      - ./:/var/www/
+    ports:
+      - '1337:80'
+    environment:
+      - "PORT=80"
+      - "DEBUG=goaler:*"
+      - "DEBUG_COLORS=true"
