@@ -2,29 +2,54 @@ import React, { Component } from 'react';
 import logo from './logo.svg';
 import './App.css';
 
-class App extends Component {
-  state = {users: []}
+const debug = require('debug')('goaler:frontend');
 
-  componentDidMount() {
-    fetch('/users')
-      .then(res => res.json())
-      .then(users => this.setState({ users }));
+class App extends Component {
+  constructor(props) {
+    super(props);
+  }
+
+  state = {users: []}
+  
+  login() {
+    this.props.auth.login();
+  }
+
+  logout() {
+    this.props.auth.logout();
+  }
+
+
+  render() {
+    const { isAuthenticated } = this.props.auth;
+    const App = isAuthenticated() ? <Dashboard logOut={this.logout.bind(this)} /> : <Landing logIn={this.login.bind(this)} />;
+    return App;
+  }
+}
+
+class Landing extends Component {
+  constructor(props) {
+    super(props);
   }
 
   render() {
     return (
-      <div className="App">
-        <header className="App-header">
-          <img src={logo} className="App-logo" alt="logo" />
-          <h1 className="App-title">Welcome to React</h1>
-        </header>
-        <p className="App-intro">
-          {this.state.users.map(user =>
-            <div key={user.id}>{user.name}</div>
-          )}
-        </p>
+      <div>
+        <div onClick={this.props.logIn}>Log In</div>
+      </div>
+    );
+  }
+}
 
-        <a href="http://localhost:1337/users">Users</a>
+class Dashboard extends Component {
+  constructor(props) {
+    super(props);
+  }
+
+  render() {
+    return (
+      <div onClick={this.props.logOut}>
+        Authorized
       </div>
     );
   }
